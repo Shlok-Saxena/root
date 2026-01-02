@@ -875,6 +875,14 @@ RModel Parse(std::string filename, int batch_size){
    // None object is returned for if property doesn't belong to layer
    PyRunString("import tensorflow",fGlobalNS,fLocalNS);
    PyRunString("import tensorflow.keras as keras",fGlobalNS,fLocalNS);
+   PyRunString("import keras\n"
+               "version = keras.__version__\n"
+               "major = int(version.split('.')[0])\n"
+               "if major >= 3:\n"
+               "    raise RuntimeError(\n"
+               "        'TMVA SOFIE Keras parser supports Keras 2 only. '\n"
+               "        'Keras 3 detected. Please export the model to ONNX.'\n"
+               "    )\n",fGlobalNS,fLocalNS);
    PyRunString("from tensorflow.keras.models import load_model",fGlobalNS,fLocalNS);
    PyRunString("print('TF/Keras Version: '+ tensorflow.__version__)",fGlobalNS,fLocalNS);
    PyRunString(TString::Format("model=load_model('%s')",filename.c_str()),fGlobalNS,fLocalNS);
